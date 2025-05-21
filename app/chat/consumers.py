@@ -27,6 +27,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data=None, bytes_data=None):
         """Handle incoming messages from client."""
+
         if text_data == "close":
             await self.send(text_data=self.build_close_response())
             await self.close(code=1000)
@@ -38,11 +39,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         """Cleanup on disconnect. Send final message and leave group."""
+
         try:
             await self.send(text_data=self.build_close_response())
         except Exception:
             pass
 
+        # _SESSIONS.pop(self.session_id, None)
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
     async def heartbeat(self, event):
