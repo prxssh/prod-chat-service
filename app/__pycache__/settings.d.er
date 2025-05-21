@@ -1,0 +1,23 @@
+##[pylyzer] failed /users/prxssh/oth/projects/python-django-wss/app/settings.py 1747759594 3329
+
+.___v_desugar_1: Never
+.Path: Never
+.BASE_DIR: Never
+.SECRET_KEY: {"django-insecure-re&sgo&zv@xe!rType_bua_y52g&aj_4x8*#Type_6gqu*#k)6l869lefj"}
+.DEBUG: {True}
+.ALLOWED_HOSTS: Never
+.INSTALLED_APPS: Never
+.MIDDLEWARE: Never
+.ROOT_URLCONF: {"app.urls"}
+.TEMPLATES: Never
+.WSGI_APPLICATION: {"app.wsgi.application"}
+.ASGI_APPLICATION: {"app.asgi.application"}
+.CHANNEL_LAYERS: Never
+.DATABASES: Never
+.AUTH_PASSWORD_VALIDATORS: Never
+.LANGUAGE_CODE: {"en-us"}
+.TIME_ZONE: {"UTC"}
+.USE_I18N: {True}
+.USE_TZ: {True}
+.STATIC_URL: {"static."}
+.DEFAULT_AUTO_FIELD: {"django.db.models.BigAutoField"}

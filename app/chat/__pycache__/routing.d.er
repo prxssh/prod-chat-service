@@ -1,0 +1,9 @@
+##[pylyzer] failed /users/prxssh/oth/projects/python-django-wss/app/chat/routing.py 1747760008 158
+.___v_desugar_1 = pyimport "urls"
+.urls = pyimport "urls"
+.path: Never
+.___v_desugar_2 = pyimport "consumers"
+.consumers = pyimport "consumers"
+.ChatConsumer: {consumers.ChatConsumer}
+.websocket_urlpatterns: Never
+er
