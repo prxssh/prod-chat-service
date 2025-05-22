@@ -16,7 +16,9 @@ from app.chat.routing import websocket_urlpatterns
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from datetime import datetime, timezone
+from app.shutdown import register_shutdown
 
+register_shutdown()
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
 
 def start_heartbeat():
@@ -36,5 +38,5 @@ start_heartbeat()
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
-    "websocket": URLRouter(websocket_urlpatterns)
+    "websocket": URLRouter(websocket_urlpatterns),
 })
