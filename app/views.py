@@ -1,5 +1,6 @@
 from django.http import JsonResponse, HttpResponse
 from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
+from app.metrics import registry
 
 ready = True
 
@@ -13,4 +14,5 @@ def readyz(request):
     )
 
 def metrics(request):
-    return HttpResponse(generate_latest(), content_type=CONTENT_TYPE_LATEST)
+    data = generate_latest(registry)
+    return HttpResponse(data, content_type=CONTENT_TYPE_LATEST)

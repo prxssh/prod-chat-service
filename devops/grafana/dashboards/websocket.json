@@ -2,7 +2,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 2,
   "links": [],
   "panels": [
     {
@@ -189,7 +189,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "active_connections",
+          "expr": "sum(active_connections)",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -409,5 +409,5 @@
   "timezone": "browser",
   "title": "WebSocket App",
   "uid": "541066da-8c9d-47f2-aea9-65360f38dd09",
-  "version": 5
+  "version": 1
 }

@@ -1,9 +1,8 @@
 # !/usr/bin/env bash
 set -euo pipefail
 
-CURRENT_COLOR=$(readlink -f docker/nginx/default.conf | xargs basename | sed 's/^default\.\(.*\)\.conf$/\1/')
+CURRENT_COLOR=$(grep -oE 'app_(blue|green)' devops/nginx/default.conf | sed 's/app_//')
 TARGET_COLOR=$([[ "$CURRENT_COLOR" == "blue" ]] && echo green || echo blue)
-
 
 if [[ "$TARGET_COLOR" == "blue" ]]; then
   APP_PORT=$APP_BLUE_PORT
@@ -37,7 +36,7 @@ for i in {1..10}; do
 done
 
 echo "🔁 Switching Nginx to $TARGET_COLOR..."
-ln -nfs default.${TARGET_COLOR}.conf devops/nginx/default.conf
+cp devops/nginx/default.${TARGET_COLOR}.conf devops/nginx/default.conf
 docker-compose -f docker/compose.yml exec -T nginx nginx -s reload
 
 curl -sf ${NGINX_LOCAL}/ping \

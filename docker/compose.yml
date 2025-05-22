@@ -5,17 +5,6 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    # uvicorn config:
-    # - 8 uvicorn workers for parallelism (one per CPU core)
-    # - uvloop for high-performance async I/O
-    # - Handles ~5000 concurrent WebSocket connections per worker (I/O bound).
-    #   Actual concurrency limited by memory, not CPU
-    command: >
-      uvicorn app.asgi:application
-      --host 0.0.0.0
-      --port 8000
-      --workers 8
-      --loop uvloop
     container_name: app_blue
     ports:
       - "${APP_BLUE_PORT}:8000"
@@ -26,22 +15,15 @@ services:
       interval: 10s
       timeout: 2s
       retries: 3
+    environment:
+      - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus_multiproc
+    volumes:
+      - multiproc-blue:/tmp/prometheus_multiproc
     
   app_green:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    # uvicorn config:
-    # - 8 uvicorn workers for parallelism (one per CPU core)
-    # - uvloop for high-performance async I/O
-    # - Handles ~5000 concurrent WebSocket connections per worker (I/O bound).
-    #   Actual concurrency limited by memory, not CPU
-    command: >
-      uvicorn app.asgi:application
-      --host 0.0.0.0
-      --port 8000
-      --workers 8
-      --loop uvloop
     container_name: app_green
     ports:
       - "${APP_GREEN_PORT}:8000"
@@ -52,6 +34,11 @@ services:
       interval: 10s
       timeout: 2s
       retries: 3
+    environment:
+      - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus_multiproc
+    volumes:
+      - multiproc-green:/tmp/prometheus_multiproc
+
 
   nginx:
     image: nginx:alpine
@@ -84,7 +71,8 @@ services:
     image: prom/prometheus
     container_name: prometheus
     volumes:
-      - ../devops/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ../devops/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ../devops/prometheus/rules:/etc/prometheus/rules
     ports:
       - "9090:9090"
     networks:
@@ -93,3 +81,7 @@ services:
 networks:
   web:
     driver: bridge
+
+volumes:
+  multiproc-blue:
+  multiproc-green:
