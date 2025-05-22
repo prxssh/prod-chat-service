@@ -38,10 +38,7 @@ jobs:
         run: pytest --maxfail=1 --disable-warnings --junitxml=pytest-report.xml
 
       - name: Run monitor.sh for 20 s
-        env:
-          METRICS_URL: http://localhost:80/metrics
-        run: |
-          timeout 20s bash ./scripts/monitor.sh > monitor.log 2>&1 || true
+        run: timeout 20s bash ./scripts/monitor.sh > monitor.log 2>&1 || true
 
       - name: Tear down services
         if: always()
