@@ -1,18 +1,23 @@
+from __future__ import annotations
+
 import json
 import uuid
 import logging
 from urllib.parse import parse_qs
+from typing import Dict, Set, Optional, Any
 from channels.generic.websocket import AsyncWebsocketConsumer
 from app.metrics import total_messages, active_connections, error_count
 
 logger = logging.getLogger(__name__)
 
 # in-memory session store that maps (session_id -> count)
-_SESSIONS = {}
-ACTIVE_CONNECTIONS= set()
+SESSIONS: Dict[str, int] = {}
+ACTIVE_CONNECTIONS: Set[ChatConsumer]= set()
 
 class ChatConsumer(AsyncWebsocketConsumer):
-    group_name = "broadcast"
+    group_name: str = "broadcast"
+    session_id: str
+    count: int
 
     async def connect(self):
         """
@@ -23,16 +28,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
         - Logs connection event.
         """
         try:
-            qs = parse_qs(self.scope["query_string"].decode())
-            raw = qs.get("session", [None])[0]
+            qs: Dict[str, list[str]] = parse_qs(self.scope["query_string"].decode())
+            raw: Optional[str] = qs.get("session", [None])[0]
 
-            if raw and raw in _SESSIONS:
+            if raw and raw in SESSIONS:
                 self.session_id = raw
-                self.count = _SESSIONS[raw]
+                self.count = SESSIONS[raw]
             else:
                 self.session_id = str(uuid.uuid4())
                 self.count = 0
-                _SESSIONS[self.session_id] = self.count 
+                SESSIONS[self.session_id] = self.count 
 
             logger.info("WebSocket connected", extra={
                 "session_id": self.session_id,
@@ -50,7 +55,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             })
             await self.close(code=1011)
 
-    async def receive(self, text_data=None, bytes_data=None):
+    async def receive(self, text_data: Optional[str] = None, bytes_data: Optional[str] = None) ->  None:
         """
         Handles incoming WebSocket messages.
         - If message is 'close', closes the socket cleanly.
@@ -73,20 +78,21 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 await self.close(code=1000)
             else:
                 self.count += 1
-                _SESSIONS[self.session_id] = self.count
+                SESSIONS[self.session_id] = self.count
 
                 await self.send(text_data=self.build_normal_response())
 
         except Exception as e:
             logger.exception("Error while handling message", extra={
                 "received_message": text_data,
-                "session_id": self.session_id
+                "session_id": self.session_id,
+                "error": str(e)
             })
 
             error_count.inc()
             await self.close(code=1011)
 
-    async def disconnect(self, close_code):
+    async def disconnect(self, code: int) -> None:
         """
         Called when the WebSocket disconnects (client or server side).
         - Logs disconnection reason and session data.
@@ -96,7 +102,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         - Decrements `active_connections` gauge.
         """
         logger.info("WebSocket disconnected", extra={
-                    "code": close_code,
+                    "code": code,
                     "count": self.count,
                     "session_id": self.session_id,
                 })
@@ -120,14 +126,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
             error_count.inc()
 
-    async def heartbeat(self, event):
+    async def heartbeat(self, event: Dict[str, Any]) -> None:
         """
         Sends a heartbeat ping to the client.
         Triggered by an external event via channel layer every 30s.
         """
         await self.send(text_data=json.dumps({"ts": event["ts"]}))
 
-    async def close_socket(self):
+    async def close_socket(self) -> None:
         """
         Called on graceful shutdown (e.g. SIGTERM).
         - Sends final message.
@@ -146,8 +152,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await self.close(code=1001)
 
-    def build_normal_response(self):
+    def build_normal_response(self) -> str:
         return json.dumps({"session_id": self.session_id, "count": self.count})
 
-    def build_close_response(self):
+    def build_close_response(self) -> str:
         return json.dumps({"session_id": self.session_id, "bye": True, "total": self.count})

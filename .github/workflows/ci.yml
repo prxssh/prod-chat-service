@@ -45,7 +45,7 @@ jobs:
 
       - name: Tear down services
         if: always()
-        run: docker-compose -f docker/compose.yml down
+        run: docker-compose --env-file dev.env -f docker/compose.yml down
 
       - name: Upload pytest report
         if: always()

@@ -23,6 +23,9 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
 
 def start_heartbeat():
     layer = get_channel_layer()
+    if layer is None:
+        raise RuntimeError("No channel layer configured")
+
     def tick():
         while True:
             ts = datetime.now(timezone.utc).isoformat()
