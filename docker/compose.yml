@@ -39,7 +39,6 @@ services:
     volumes:
       - multiproc-green:/tmp/prometheus_multiproc
 
-
   nginx:
     image: nginx:alpine
     container_name: nginx

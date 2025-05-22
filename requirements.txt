@@ -6,8 +6,12 @@ Django==5.2.1
 h11==0.16.0
 httptools==0.6.4
 idna==3.10
+iniconfig==2.1.0
 loguru==0.7.3
+packaging==25.0
+pluggy==1.6.0
 prometheus_client==0.22.0
+pytest==8.3.5
 python-dotenv==1.1.0
 python-json-logger==3.3.0
 PyYAML==6.0.2
