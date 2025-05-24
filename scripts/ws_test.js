@@ -3,15 +3,13 @@ import { check, sleep } from 'k6';
 
 export let options = {
   stages: [
-    { duration: '1m', target: 1000 },
-    { duration: '1m', target: 2000 },
-    { duration: '1m', target: 2000 },
+    { duration: '1m', target: 1500 },
     { duration: '1m', target: 3000 },
-    { duration: '1m', target: 4000 },
-    { duration: '1m', target: 4000 },
-    { duration: '1m', target: 5000 },
+    { duration: '1m', target: 4500 },
     { duration: '1m', target: 5500 },
-    { duration: '2m', target: 0 },
+    { duration: '1m', target: 3000 },
+    { duration: '1m', target: 1500 },
+    { duration: '1m', target: 0 },
   ],
 };
 
@@ -22,10 +20,6 @@ export default function () {
   const res = ws.connect(url, null, (socket) => {
     socket.on('open', () => {
         socket.send('ping')
-
-        socket.setInterval(() => {
-            socket.send('ping')
-        }, 10_000);
     });
 
     socket.on('message', (raw) => {
@@ -43,7 +37,6 @@ export default function () {
         });
         seenFirst = true;
       } else {
-        // response to our ping
         check(data, {
           'count incremented to one': (d) => d.count === 1,
         });
@@ -51,6 +44,7 @@ export default function () {
       }
     });
 
+    socket.setInterval(() => socket.send('ping'), 10000)
     socket.setTimeout(() => socket.close(), 30000);
   });
 
@@ -58,5 +52,5 @@ export default function () {
     'connected (101)': (r) => r && r.status === 101,
   });
 
-  sleep(1);
+  sleep(5);
 }

@@ -7,6 +7,8 @@ from urllib.parse import parse_qs
 from typing import Dict, Set, Optional, Any
 from channels.generic.websocket import AsyncWebsocketConsumer
 from app.metrics import total_messages, active_connections, error_count
+from websockets.exceptions import ConnectionClosedOK
+from uvicorn.protocols.utils import ClientDisconnected
 
 logger = logging.getLogger(__name__)
 
@@ -47,8 +49,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self.accept()
             active_connections.inc()
             ACTIVE_CONNECTIONS.add(self)
-
             await self.send(text_data=self.build_normal_response())
+
+        except (ConnectionClosedOK, ClientDisconnected):
+            return
+
         except Exception as e:
             logger.exception("Connection failed", extra={
                 "error": str(e)
@@ -81,6 +86,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 SESSIONS[self.session_id] = self.count
 
                 await self.send(text_data=self.build_normal_response())
+
+        except (ConnectionClosedOK, ClientDisconnected):
+            return
 
         except Exception as e:
             logger.exception("Error while handling message", extra={

@@ -3,6 +3,8 @@
 A production-ready Django-based WebSocket service with zero-downtime blue/green
 Docker Compose deployment, observability, and health checks.
 
+![Grafana Dashboard](data/grafana-dashboard.png)
+
 ## 🚀 Features
 
 * **Blue/Green Deployment** via Docker Compose (nginx reverse proxy with

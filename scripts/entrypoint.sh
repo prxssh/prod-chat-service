@@ -8,9 +8,9 @@ rm -f /tmp/prometheus_multiproc/*
 exec uvicorn app.asgi:application \
   --host 0.0.0.0 \
   --port 8000 \
-  --workers 5 \
+  --workers 14 \
   --ws websockets \
-  --limit-concurrency 1024 \
+  --limit-concurrency 2500 \
   --timeout-keep-alive 5 \
   --timeout-graceful-shutdown 30 \
   --loop uvloop
