@@ -33,6 +33,8 @@ Docker Compose. They include:
 
 Each dashboard consists of multiple panels that query Prometheus for:
 
+![Grafana Dashboard Load Testing](data/grafana-dashboard-load-testing.png)
+
 ```promql
 # Number of open connections
 active_connections
@@ -47,7 +49,9 @@ rate(error_count[1m])
 
 ## 3. Alerts & Notifications
 
-Alerts are defined in Prometheus use simple rules:
+![Prometheus Alert Firing](data/prometheus-rule-firing.png)
+
+Alerts are defined in Prometheus using simple rules:
 
 - It'll raise when active connections drop down to 0 for 60s.
 

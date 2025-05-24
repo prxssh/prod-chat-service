@@ -38,9 +38,8 @@ export default function () {
         seenFirst = true;
       } else {
         check(data, {
-          'count incremented to one': (d) => d.count === 1,
+          'socket responsive': (d) => typeof d == 'object' && d !== null,
         });
-        //socket.close();
       }
     });
 

@@ -36,14 +36,13 @@ deployment rationale for the Django WebSocket Blue/Green deployment etc.
    * Currently, we're dumping everything in memory.
    * (Optimization): Redis (or alternative) can be used as the channel layer
      for pub/sub and group messaging.
-   * Ensures messages broadcasted (e.g., chat rooms) are propagated across all Uvicorn workers.
+   * Ensures messages broadcasted (e.g., chat rooms) are propagated across all
+     Uvicorn workers.
 
 3. **Session & Connection Management**
 
    * Connections are tracked in an in-memory map (`SESSIONS`) and metrics
      counters (active connections, total messages).
-   * On scale-out (multiple hosts), channel layer persistence or external store
-     (Redis) would come in handy.
 
 ---
 

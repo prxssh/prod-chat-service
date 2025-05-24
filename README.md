@@ -21,16 +21,15 @@ Docker Compose deployment, observability, and health checks.
 
 ## ⚙️ Prerequisites
 
-* Docker >= 20.10
-* Docker Compose >= 1.29
-* k6 (for load testing)
+* Docker >= 27.0.0
+* Docker Compose >= 2.29.0
 
 ## 🛠️ Quick Start
 
 ### 1. Clone the repository
 
 ```bash
-git clone git@github.com:prxssh/python-django-ws && cd python-django-ws
+git clone git@github.com:prxssh/prod-chat-service && cd prod-chat-service
 ```
 
 ### 2. Build and start the full stack

@@ -47,8 +47,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             })
 
             await self.accept()
+            await self.channel_layer.group_add(self.group_name, self.channel_name)
+
             active_connections.inc()
             ACTIVE_CONNECTIONS.add(self)
+
             await self.send(text_data=self.build_normal_response())
 
         except (ConnectionClosedOK, ClientDisconnected):

@@ -98,3 +98,4 @@ networks:
 volumes:
   multiproc-blue:
   multiproc-green:
+  redis-data:
