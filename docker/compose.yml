@@ -76,6 +76,20 @@ services:
       - "9090:9090"
     networks:
       - web
+  k6:
+    image: grafana/k6:latest
+    container_name: k6
+    depends_on:
+      - nginx
+    volumes:
+      - '../scripts/ws_test.js:/scripts/ws_test.js:ro'
+      - '../k6-results:/results'
+    networks:
+      - web
+    entrypoint: >
+      k6 run
+        --out json=/results/result.json
+        /scripts/ws_test.js
 
 networks:
   web:
