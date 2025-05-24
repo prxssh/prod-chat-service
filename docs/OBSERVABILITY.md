@@ -3,8 +3,6 @@
 This document details the metrics, dashboards, and alerting setup for the
 Django WebSocket service.
 
-[Grafana Dashboard](/data/grafana-dashboard.png)
-
 ---
 
 ## 1. Prometheus Metrics

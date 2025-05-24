@@ -29,7 +29,7 @@ Docker Compose deployment, observability, and health checks.
 ### 1. Clone the repository
 
 ```bash
-git clone git@github.com:prxssh/prod-chat-service && cd prod-chat-service
+git clone git@github.com:prxssh/prod-websocket-service && cd prod-websocket-service
 ```
 
 ### 2. Build and start the full stack
