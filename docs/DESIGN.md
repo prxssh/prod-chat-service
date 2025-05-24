@@ -11,7 +11,7 @@ deployment rationale for the Django WebSocket Blue/Green deployment etc.
   Channels to handle WebSocket connections.
 * **Uvicorn ASGI Server**: Runs the Channels application, providing
   high-performance async I/O. The startup commands can be found in
-  [scripts/entrypoint.sh](entrypoint.sh).
+  [entrypoint.sh](scripts/entrypoint.sh).
 * **Nginx**: Reverse proxy for HTTP/WebSocket traffic, and routes to active
   app instances.
 * **Docker Compose**: Orchestrates multi-container environment, including two

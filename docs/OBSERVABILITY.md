@@ -3,7 +3,7 @@
 This document details the metrics, dashboards, and alerting setup for the
 Django WebSocket service.
 
-[Grafana Dashboard](data/grafana-dashboard.png)
+[Grafana Dashboard](/data/grafana-dashboard.png)
 
 ---
 
@@ -33,7 +33,7 @@ Docker Compose. They include:
 
 Each dashboard consists of multiple panels that query Prometheus for:
 
-![Grafana Dashboard Load Testing](data/grafana-dashboard-load-testing.png)
+![Grafana Dashboard Load Testing](/data/grafana-dashboard-load-testing.png)
 
 ```promql
 # Number of open connections
@@ -49,7 +49,7 @@ rate(error_count[1m])
 
 ## 3. Alerts & Notifications
 
-![Prometheus Alert Firing](data/prometheus-rule-firing.png)
+![Prometheus Alert Firing](/data/prometheus-rule-firing.png)
 
 Alerts are defined in Prometheus using simple rules:
 
