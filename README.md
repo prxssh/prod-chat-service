@@ -39,7 +39,7 @@ This command first spins up the required prerequisites for the application
 services.
 
 ```bash
-docker-compose -f docker/compose.yml up --build -d
+docker-compose --env-file dev.env -f docker/compose.yml up -d
 ```
 
 ### 3. Verify Services
